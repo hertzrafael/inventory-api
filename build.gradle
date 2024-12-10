@@ -1,14 +1,17 @@
 import org.apache.tools.ant.filters.ReplaceTokens
 
-apply plugin: 'java'
+plugins {
+    id 'java'
+
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+/*apply plugin: 'java'
 apply plugin: 'java-library'
-apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.github.johnrengelman.shadow'*/
 
 group = 'com.henryfabio'
 version = '2.0.3-SNAPSHOT'
-
-sourceCompatibility = '1.8'
-targetCompatibility = '1.8'
 
 compileJava.options.encoding = "UTF-8"
 compileTestJava.options.encoding = "UTF-8"
@@ -25,7 +28,7 @@ dependencies {
     compileOnly spigot
     testCompileOnly spigot
 
-    api 'org.jetbrains:annotations:22.0.0'
+    compileOnly 'org.jetbrains:annotations:22.0.0'
 
     def lombok = 'org.projectlombok:lombok:1.18.20'
     compileOnly lombok
@@ -41,7 +44,7 @@ processResources {
     }
 }
 
-buildscript {
+/*buildscript {
     repositories {
         jcenter()
     }
@@ -49,16 +52,9 @@ buildscript {
     dependencies {
         classpath 'com.github.jengelman.gradle.plugins:shadow:5.0.0'
     }
-}
+}*/
 
-def defaultJarName = project.name + '-' + project.version
-
-shadowJar {
-    archiveName("${defaultJarName}.jar")
-}
-tasks.build.dependsOn shadowJar
-
-task buildTest(type: Jar) {
+tasks.register('buildTest', Jar) {
     from sourceSets.main.output
     from sourceSets.test.output
 }
